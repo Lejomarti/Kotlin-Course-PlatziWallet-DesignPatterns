@@ -1,4 +1,4 @@
-package com.cristianvillamil.platziwallet.ui.home
+package com.cristianvillamil.platziwallet.ui.home.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cristianvillamil.platziwallet.R
+import com.cristianvillamil.platziwallet.ui.home.FavoriteTransfer
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -43,14 +44,16 @@ class HomeFragment : Fragment() {
         favoriteTransfersRecyclerView.layoutManager =
             LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         favoriteTransfersRecyclerView.adapter = favoriteTransferAdapter
+
+
         val items = ArrayList<FavoriteTransfer>()
         items.add(
             FavoriteTransfer(
                 1,
-                "Freddy Vega",
+                "Alejo Marti",
                 456.000,
                 "Hace 2h",
-                "https://media.licdn.com/dms/image/C4E03AQGlqpsnWjB6Yg/profile-displayphoto-shrink_200_200/0?e=1582761600&v=beta&t=dYj3_HcoKdR66KpEup0FPBTziu8xiF2I2snqJbf4DGM"
+                "https://i.ytimg.com/vi/uiOD_HiS8nc/maxresdefault.jpg"
             )
         )
         items.add(
