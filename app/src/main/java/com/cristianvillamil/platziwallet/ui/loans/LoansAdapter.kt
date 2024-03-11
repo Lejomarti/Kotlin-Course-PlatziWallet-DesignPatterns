@@ -1,12 +1,13 @@
 package com.cristianvillamil.platziwallet.ui.loans
 
 import android.view.LayoutInflater
-import android.view.View
+
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.cristianvillamil.platziwallet.R
+
+import com.cristianvillamil.platziwallet.databinding.LoanRowBinding
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.loan_row.view.*
+
 
 class LoansAdapter : RecyclerView.Adapter<LoanViewHolder>() {
     private var loansList = emptyList<Loan>()
@@ -17,8 +18,11 @@ class LoansAdapter : RecyclerView.Adapter<LoanViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LoanViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.loan_row, parent, false)
-        return LoanViewHolder(view);
+//        val view = LayoutInflater.from(parent.context).inflate(R.layout.loan_row, parent, false)
+//        return LoanViewHolder(view);
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = LoanRowBinding.inflate(inflater, parent, false)
+        return LoanViewHolder(binding)
     }
 
     override fun getItemCount(): Int = loansList.size
@@ -28,12 +32,12 @@ class LoansAdapter : RecyclerView.Adapter<LoanViewHolder>() {
 
 }
 
-class LoanViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-    fun bindItem(loan: Loan) = with(view) {
+class LoanViewHolder(private val binding: LoanRowBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bindItem(loan: Loan) {
         Picasso
             .get()
             .load("https://tickera-wpsalad.netdna-ssl.com/wp-content/themes/tickera/style/img/freebies/icons/events/24.png")
-            .into(loanImageView)
+            .into(binding.loanImageView)
 
     }
 }

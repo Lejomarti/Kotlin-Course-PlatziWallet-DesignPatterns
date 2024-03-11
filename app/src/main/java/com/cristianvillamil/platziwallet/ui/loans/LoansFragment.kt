@@ -9,11 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cristianvillamil.platziwallet.R
-import kotlinx.android.synthetic.main.fragment_loans.*
+import com.cristianvillamil.platziwallet.databinding.FragmentLoansBinding
 
 class LoansFragment : Fragment() {
 
     private val adapter = LoansAdapter()
+    private lateinit var binding: FragmentLoansBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,7 +27,7 @@ class LoansFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-        circularProgress.setProgressWithAnimation(
+        binding.circularProgress.setProgressWithAnimation(
             70f,
             1000,
             AccelerateDecelerateInterpolator(),
@@ -39,8 +40,8 @@ class LoansFragment : Fragment() {
             Loan("", 50.toDouble(), 500.toDouble(), ""),
             Loan("", 50.toDouble(), 500.toDouble(), "")
         )
-        loansRecyclerView.adapter = adapter
-        loansRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.loansRecyclerView.adapter = adapter
+        binding.loansRecyclerView.layoutManager = LinearLayoutManager(context)
         adapter.setData(loansList)
 
     }

@@ -11,10 +11,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cristianvillamil.platziwallet.R
-import kotlinx.android.synthetic.main.fragment_transfer.*
+import com.cristianvillamil.platziwallet.databinding.FragmentTransferBinding
 import java.text.NumberFormat
 
 class TransferFragment : Fragment() {
+
+    private lateinit var binding: FragmentTransferBinding
 
     private val DOLLAR_SYMBOL = "\$ "
     private val CLEAN_STRING_REGEX_PATTERN = "[\$,.\\s]".toRegex()
@@ -29,7 +31,7 @@ class TransferFragment : Fragment() {
                 item.isSelected = true
                 transferAccountsAdapter.unSelectAllDistinctTo(item)
                 transferAccountsAdapter.notifyDataSetChanged()
-                transferButton.isEnabled = true
+                binding.transferButton.isEnabled = true
             }
         }
     private val transferAccountsAdapter = TransferAccountsAdapter(onItemSelectedListener)
@@ -55,8 +57,8 @@ class TransferFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        transferAccountsRecyclerView.layoutManager = LinearLayoutManager(context)
-        transferAccountsRecyclerView.adapter = transferAccountsAdapter
+        binding.transferAccountsRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.transferAccountsRecyclerView.adapter = transferAccountsAdapter
         val transferAccount = TransferAccount.Builder("12345")
             .setProfilePhotoUrl("htttps://www.google.com/imagenDePrueba")
             .setUserName("Paquito Perez")
@@ -73,13 +75,13 @@ class TransferFragment : Fragment() {
     }
 
     private fun initAmountInputEditText() {
-        amountValueInputEditText.onFocusChangeListener =
+        binding.amountValueInputEditText.onFocusChangeListener =
             View.OnFocusChangeListener { _, hasFocus ->
-                if (hasFocus && amountValueInputEditText.text.toString().isBlank()) {
-                    amountValueInputEditText.setText(DOLLAR_SYMBOL)
+                if (hasFocus && binding.amountValueInputEditText.text.toString().isBlank()) {
+                    binding.amountValueInputEditText.setText(DOLLAR_SYMBOL)
                 }
             }
-        amountValueInputEditText.addTextChangedListener(object : TextWatcher {
+        binding.amountValueInputEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
             }
 
@@ -89,19 +91,19 @@ class TransferFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 s.toString().let { text ->
                     if (!text.isBlank() && text != current) {
-                        amountValueInputEditText.removeTextChangedListener(this)
+                        binding.amountValueInputEditText.removeTextChangedListener(this)
                         val cleanString = text.replace(CLEAN_STRING_REGEX_PATTERN, "")
                         if (cleanString.isBlank()) {
-                            amountValueInputEditText.setText(DOLLAR_SYMBOL)
-                            amountValueInputEditText.addTextChangedListener(this)
-                            amountValueInputEditText.setSelection(amountValueInputEditText.text.toString().length)
+                            binding.amountValueInputEditText.setText(DOLLAR_SYMBOL)
+                            binding.amountValueInputEditText.addTextChangedListener(this)
+                            binding.amountValueInputEditText.setSelection(binding.amountValueInputEditText.text.toString().length)
                         } else {
                             val parsed = cleanString.toDouble()
                             val formatted = NumberFormat.getCurrencyInstance().format((parsed))
                             current = formatted
-                            amountValueInputEditText.setText(formatted)
-                            amountValueInputEditText.setSelection(formatted.length)
-                            amountValueInputEditText.addTextChangedListener(this)
+                            binding.amountValueInputEditText.setText(formatted)
+                            binding.amountValueInputEditText.setSelection(formatted.length)
+                            binding.amountValueInputEditText.addTextChangedListener(this)
                         }
 
                     }

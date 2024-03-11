@@ -9,26 +9,33 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cristianvillamil.platziwallet.R
+import com.cristianvillamil.platziwallet.databinding.FragmentHomeBinding
 import com.cristianvillamil.platziwallet.ui.home.FavoriteTransfer
+import com.cristianvillamil.platziwallet.ui.home.HomeContract
+import com.cristianvillamil.platziwallet.ui.home.presenter.HomePresenter
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_home.*
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(),HomeContract.View {
 
     private val favoriteTransferAdapter = FavoriteTransferAdapter()
+    private lateinit var binding: FragmentHomeBinding
+    private var homePresenter:HomeContract.Presenter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-        circularProgress.setProgressWithAnimation(
+        homePresenter = HomePresenter(this)
+        homePresenter?.retrieveFavoriteTransfers()
+        binding.circularProgress.setProgressWithAnimation(
             70f,
             1000,
             AccelerateDecelerateInterpolator(),
@@ -37,63 +44,26 @@ class HomeFragment : Fragment() {
         Picasso
             .get()
             .load("https://media.licdn.com/dms/image/C4E03AQFcCuDIJl0mKg/profile-displayphoto-shrink_200_200/0?e=1583366400&v=beta&t=ymt3xgMe5bKS-2knNDL9mQYFksP9ZHne5ugIqEyRjZs")
-            .into(profilePhotoImageView)
+            .into(binding.profilePhotoImageView)
     }
 
     private fun initRecyclerView() {
-        favoriteTransfersRecyclerView.layoutManager =
+        binding.favoriteTransfersRecyclerView.layoutManager =
             LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        favoriteTransfersRecyclerView.adapter = favoriteTransferAdapter
+        binding.favoriteTransfersRecyclerView.adapter = favoriteTransferAdapter
+        //        favoriteTransferAdapter.setData(items)
 
+    }
 
-        val items = ArrayList<FavoriteTransfer>()
-        items.add(
-            FavoriteTransfer(
-                1,
-                "Alejo Marti",
-                456.000,
-                "Hace 2h",
-                "https://i.ytimg.com/vi/uiOD_HiS8nc/maxresdefault.jpg"
-            )
-        )
-        items.add(
-            FavoriteTransfer(
-                1,
-                "Nestor Villamil",
-                210.900,
-                "Ayer",
-                "https://krausefx.com/assets/posts/profilePictures/FelixKrause2016.jpg"
-            )
-        )
-        items.add(
-            FavoriteTransfer(
-                1,
-                "Fernando Ávila",
-                456.000,
-                "Hace 2h",
-                "https://www.oliverwyman.com/content/dam/oliver-wyman/v2/careers/profiles/scottbk-profile-460x460.jpg"
-            )
-        )
-        items.add(
-            FavoriteTransfer(
-                1,
-                "Cristian Villamil",
-                456.000,
-                "Hace 2h",
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTw8mKnjVErhmhl5S_aUZfvf86vwZOMJBqbUqM-guT-kv6K4xu&s"
-            )
-        )
-        items.add(
-            FavoriteTransfer(
-                1,
-                "Cristian Villamil",
-                456.000,
-                "Hace 2h",
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVSEHZQ2HJu9FEzFLU4yEAUv46sfRQjxUYkiVv7IEFxNndQ_7C&s"
-            )
-        )
+    override fun showLoader() {
+        binding.homeLoader.visibility = View.VISIBLE
+    }
 
-        favoriteTransferAdapter.setData(items)
+    override fun hideLoader() {
+        binding.homeLoader.visibility = View.GONE
+    }
 
+    override fun showFavoriteTransfers(favoriteTransfer: List<FavoriteTransfer>) {
+        favoriteTransferAdapter.setData(favoriteTransfer)
     }
 }
